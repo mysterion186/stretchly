@@ -1,0 +1,165 @@
+{
+  "name": "Stretchly",
+  "version": "1.17.2",
+  "description": "The break time reminder app",
+  "main": "app/main.js",
+  "engines": {
+    "node": "20.18.1"
+  },
+  "scripts": {
+    "start": "electron .",
+    "dev": "cross-env NODE_ENV=development electron . --trace-warnings --trace-deprecation --enable-logging --remote-debugging-port=9222",
+    "postinstall": "electron-builder install-app-deps",
+    "pack": "electron-builder build --dir",
+    "dist": "electron-builder build",
+    "test": "vitest run",
+    "test-single": "vitest run $1",
+    "coverage": "vitest run --coverage",
+    "tdd": "vitest --watch test",
+    "lint": "cross-env ./node_modules/.bin/standard",
+    "prepublishOnly": "pinst --disable",
+    "postpublish": "pinst --enable",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hovancik/stretchly.git"
+  },
+  "keywords": [
+    "Stretchly",
+    "break",
+    "time",
+    "reminder"
+  ],
+  "author": "Jan Hovancik <jan@hovancik.net>",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/hovancik/stretchly/issues"
+  },
+  "homepage": "https://hovancik.net/stretchly",
+  "build": {
+    "appId": "net.hovancik.stretchly",
+    "productName": "Stretchly",
+    "dmg": {
+      "icon": "build/icon.icns",
+      "iconSize": 128,
+      "contents": [
+        {
+          "x": 355,
+          "y": 125,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 155,
+          "y": 125,
+          "type": "file"
+        }
+      ]
+    },
+    "mac": {
+      "category": "public.app-category.healthcare-fitness",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "extendInfo": {
+        "LSBackgroundOnly": 1,
+        "LSUIElement": 1
+      }
+    },
+    "linux": {
+      "category": "Utility",
+      "target": [
+        "AppImage",
+        "deb",
+        "rpm",
+        "freebsd",
+        "pacman",
+        "tar.xz",
+        "apk"
+      ],
+      "asarUnpack": "node_modules/macos-notification-state/**"
+    },
+    "rpm": {
+      "fpm": [
+        "--rpm-rpmbuild-define",
+        "_build_id_links none"
+      ]
+    },
+    "appx": {
+      "identityName": "33881JanHovancik.stretchly",
+      "publisher": "CN=35004EDA-CCDD-4304-A014-784D754E043F",
+      "publisherDisplayName": "Jan Hovancik",
+      "applicationId": "Stretchly",
+      "displayName": "Stretchly"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "7z",
+        "appx"
+      ],
+      "asarUnpack": [
+        "node_modules/windows-quiet-hours/**",
+        "node_modules/windows-notification-state/**",
+        "node_modules/macos-notification-state/**"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "nsisWeb": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "standard": {
+    "globals": [
+      "it",
+      "describe",
+      "before",
+      "after",
+      "beforeEach",
+      "afterEach",
+      "Audio",
+      "fetch",
+      "Notification",
+      "alert",
+      "__electronLog"
+    ]
+  },
+  "devDependencies": {
+    "@vitest/coverage-istanbul": "^3.0.2",
+    "cross-env": "^7.0.3",
+    "electron": "^34.0.0",
+    "electron-builder": "^25.1.8",
+    "husky": "^9.1.7",
+    "rimraf": "^6.0.1",
+    "standard": "^17.1.2",
+    "vitest": "^3.0.2"
+  },
+  "dependencies": {
+    "@electron/remote": "^2.1.2",
+    "auto-launch": "^6.0.0-rc1",
+    "dbus-final": "github:Jelmerro/dbus-final",
+    "electron-log": "^5.2.4",
+    "electron-store": "^8.2.0",
+    "humanize-duration": "^3.32.1",
+    "i18next": "^24.2.1",
+    "i18next-fs-backend": "^2.6.0",
+    "luxon": "^3.5.0",
+    "meeussunmoon": "^3.0.3",
+    "ps-list": "7.2",
+    "rtl-detect": "^1.1.2",
+    "semver": "^7.6.3",
+    "windows-focus-assist": "^1.4.0",
+    "windows-quiet-hours": "github:hovancik/windows-quiet-hours#fix-LPTSTR"
+  }
+}

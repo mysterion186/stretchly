@@ -1,0 +1,110 @@
+{
+  "main": {
+    "toolTipHeader": "Stretchly - 쉬는시간 알림이",
+    "microbreakIn": "Mini Break in $t(utils.seconds, {'count': {{seconds}} })",
+    "breakIn": "Long Break in $t(utils.seconds, {'count': {{seconds}} })",
+    "resumingBreaks": "쉬는시간 마저 시작",
+    "downloadLatestVersion": "최신 버전 다운로드",
+    "skipToTheNext": "다음 쉬는 시간 으로",
+    "resume": "다시 시작",
+    "pause": "일시정지",
+    "forHour": "한시간동안",
+    "for2Hours": "두시간동안",
+    "for5Hours": "다섯시간동안",
+    "untilMorning": "아침까지",
+    "indefinitely": "영원히",
+    "resetBreaks": "쉬는 시간 재설정",
+    "quitStretchly": "stretchly 나가기",
+    "preferences": "설정",
+    "toBreak": "긴 휴식 시간",
+    "toMicrobreak": "짧은 휴식",
+    "restoreDefaults": "설정 초기화",
+    "warning": "모든 설정을 기본값으로 초기화 합니다.",
+    "continue": "계속",
+    "cancel": "취소",
+    "syncPreferences": "동기화 환경설정",
+    "contributorPreferences": "기여자 환경설정"
+  },
+  "break": {
+    "title": "쉬는 시간이에요!",
+    "skip": "쉬는 시간 건너뛰기",
+    "postpone": "이 휴식 시간 미루기"
+  },
+  "preferences": {
+    "theme": {
+      "greenClouds": "초록 하늘",
+      "autumnBeBlessed": "축복받은 가을",
+      "graphiteCrystal": "흑연 크리스탈",
+      "coffeeKisses": "커피 키스",
+      "morningSwim": "아침 수영",
+      "crystalGlass": "유리잔 소리",
+      "windChime": "풍경 소리",
+      "ticToc": "시계 소리"
+    },
+    "about": {
+      "tagline": "쉬는시간 알리미"
+    },
+    "nav": {
+      "settings": "설정",
+      "schedule": "쉬는 시간",
+      "theme": "테마",
+      "about": "소개",
+      "heart": "Stretchly 좋아요"
+    },
+    "title": "Stretchly 설정",
+    "settings": {
+      "showBreaksIn": "쉬는 시간 표시 방법:",
+      "window": "창모드",
+      "fullscreen": "전체화면",
+      "language": "언어 선택:",
+      "restoreDefaults": "설정 초기화",
+      "showIdeas": "쉬는 시간 중에 팁을 보여줍니다",
+      "allScreens": "모든 화면에 쉬는 시간 알림을 보여줍니다",
+      "monitorDnd": "방해 금지 모드에서도 알림을 보여줍니다",
+      "openAtLogin": "로그인할 때 Stretchly를 자동으로 시작합니다",
+      "monitorIdleTime": "시스템 유휴 상태 모니터링(시스템이 유휴 상태일 때, 휴식 일시정지)."
+    },
+    "schedule": {
+      "miniBreaks": "짧은 휴식:",
+      "miniBreaksInfo": "짧은 휴식은 정기적으로 잠깐씩 쉬며 스트레칭하고 휴식을 취할 수 있는 시간을 제공합니다.",
+      "enableMiniBreaks": "짧은 휴식 활성",
+      "breakFor": "휴식 시간:",
+      "every": "매:"
+    }
+  },
+  "utils": {
+    "none_other": "{{count}}",
+    "percent_other": "{{count}} percent",
+    "oclock_other": "{{count}}시",
+    "seconds_other": "{{count}}초",
+    "minutes_other": "{{count}}분",
+    "hours_other": "{{count}}시간",
+    "remaining": "{{count}} 남았어요",
+    "inAbout": "약 {{count}} 후"
+  },
+  "process": {
+    "newVersionAvailable": "새로운 버전이 나왔어요!"
+  },
+  "welcome": {
+    "title": "Stretchly에 오신것을 환영해요",
+    "breakTimeReminderApp": "쉬는시간 알림이"
+  },
+  "statusMessages": {
+    "paused": "일시정지",
+    "nextLongBreak": "다음 Long Break:",
+    "nextMiniBreak": "다음 Mini Break:",
+    "afterMiniBreak_other": "{{count}} Mini Breaks 후",
+    "resuming": "다시 시작:"
+  },
+  "miniBreakIdeas": {
+    "abg": {
+      "text": "주먹을 쥐고 손가락이 천장을 향하도록펼치세요(누군가에게 \"Stop\"이라고 말하듯이)."
+    },
+    "abj": {
+      "text": "바르게 서서 늘어나는 느낌이 들 때까지 손으로 머리를 어깨 쪽으로 천천히 기울입니다."
+    },
+    "abk": {
+      "text": "양팔을 옆구리에 붙이고 바로 서세요. 견갑골(날개뼈)을 꽉 쥐듯 모으고 자세를 유지하세요."
+    }
+  }
+}
