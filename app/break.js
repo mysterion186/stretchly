@@ -29,7 +29,7 @@ window.onload = (event) => {
     breakText.innerHTML = message[1]
   })
 
-  ipcRenderer.once('progress', (event, started, duration, strictMode, postpone, postponePercent, backgroundColor) => {
+  ipcRenderer.once('progress', (event, started, duration, strictMode, postpone, postponePercent, backgroundColor, backgroundImage) => {
     const progress = document.querySelector('#progress')
     const progressTime = document.querySelector('#progress-time')
     const postponeElement = document.querySelector('#postpone')
@@ -37,6 +37,10 @@ window.onload = (event) => {
     const mainColor = settings.get('mainColor')
     document.body.classList.add(mainColor.substring(1))
     document.body.style.backgroundColor = backgroundColor
+
+    if (backgroundImage) {
+      document.body.style.backgroundImage = `url('${backgroundImage}')`
+    }
 
     document.querySelectorAll('.tiptext').forEach(tt => {
       const keyboardShortcut = settings.get('endBreakShortcut')
@@ -46,7 +50,7 @@ window.onload = (event) => {
     window.setInterval(() => {
       if (settings.get('currentTimeInBreaks')) {
         document.querySelector('.breaks > :last-child').innerHTML =
-        (new Date()).toLocaleTimeString()
+          (new Date()).toLocaleTimeString()
       }
       if (Date.now() - started < duration) {
         const passedPercent = (Date.now() - started) / duration * 100

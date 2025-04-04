@@ -776,9 +776,15 @@ function startMicrobreak() {
           })
         }
       }
+      const activeProfile = profileManager.getActiveProfile()
+      let backgroundImage = null
+      if (activeProfile && activeProfile.backgroundImage && activeProfile.backgroundImage.microbreak) {
+        backgroundImage = profileManager.getBackgroundImagePath(settings.get('profiles.active'), 'microbreak')
+      }
       event.sender.send('microbreakIdea', idea)
       event.sender.send('progress', startTime,
-        breakDuration, strictMode, postponable, postponableDurationPercent, calculateBackgroundColor(settings.get('miniBreakColor')))
+        breakDuration, strictMode, postponable, postponableDurationPercent,
+        calculateBackgroundColor(settings.get('miniBreakColor')), backgroundImage)
     })
     // microbreakWinLocal.webContents.openDevTools()
     microbreakWinLocal.once('ready-to-show', () => {
@@ -926,9 +932,16 @@ function startBreak() {
           })
         }
       }
+      const activeProfile = profileManager.getActiveProfile()
+      let backgroundImage = null
+      if (activeProfile && activeProfile.backgroundImage && activeProfile.backgroundImage.microbreak) {
+        backgroundImage = profileManager.getBackgroundImagePath(settings.get('profiles.active'), 'break')
+      }
+
       event.sender.send('breakIdea', idea)
       event.sender.send('progress', startTime,
-        breakDuration, strictMode, postponable, postponableDurationPercent, calculateBackgroundColor(settings.get('mainColor')))
+        breakDuration, strictMode, postponable, postponableDurationPercent,
+        calculateBackgroundColor(settings.get('mainColor')), backgroundImage)
     })
     // breakWinLocal.webContents.openDevTools()
     breakWinLocal.once('ready-to-show', () => {

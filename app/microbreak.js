@@ -27,7 +27,7 @@ window.onload = (e) => {
     microbreakIdea.innerHTML = message
   })
 
-  ipcRenderer.once('progress', (event, started, duration, strictMode, postpone, postponePercent, backgroundColor) => {
+  ipcRenderer.once('progress', (event, started, duration, strictMode, postpone, postponePercent, backgroundColor, backgroundImage) => {
     const progress = document.querySelector('#progress')
     const progressTime = document.querySelector('#progress-time')
     const postponeElement = document.querySelector('#postpone')
@@ -35,6 +35,11 @@ window.onload = (e) => {
     const miniBreakColor = settings.get('miniBreakColor')
     document.body.classList.add(miniBreakColor.substring(1))
     document.body.style.backgroundColor = backgroundColor
+
+    if (backgroundImage) {
+      document.body.style.backgroundImage = `url('${backgroundImage}')`
+    }
+
 
     document.querySelectorAll('.tiptext').forEach(tt => {
       const keyboardShortcut = settings.get('endBreakShortcut')
