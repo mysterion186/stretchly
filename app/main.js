@@ -45,7 +45,7 @@ const Command = require('./utils/commands')
 let microbreakIdeas
 let breakIdeas
 let breakPlanner
-let profileManager
+let profileManager = null
 let appIcon = null
 let autostartManager = null
 let processWin = null
@@ -181,6 +181,7 @@ async function initialize(isAppStart = true) {
   }
   if (!profileManager) {
     profileManager = new ProfileManager(settings)
+    global.profileManager = profileManager
   }
   // TODO maybe we should not reinitialize but handle everything when we save new values for preferences
   log.info(`Stretchly: ${isAppStart ? '' : 're'}initializing...`)

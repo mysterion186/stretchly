@@ -1,4 +1,5 @@
 const { ipcRenderer } = require('electron')
+const fs = require('fs')
 const remote = require('@electron/remote')
 const Utils = remote.require('./utils/utils')
 const HtmlTranslate = require('./utils/htmlTranslate')
@@ -24,7 +25,21 @@ window.onload = (e) => {
 
   ipcRenderer.once('microbreakIdea', (event, message) => {
     const microbreakIdea = document.querySelector('.microbreak-idea')
-    microbreakIdea.innerHTML = message
+
+    const profileIdea = remote.getGlobal('profileManager').getMiniBreakIdea()
+    if (profileIdea) {
+      microbreakIdea.innerHTML = profileIdea
+    } else {
+      microbreakIdea.innerHTML = message
+    }
+
+    // Appliquer l'image de fond si disponible
+    const backgroundImage = remote.getGlobal('profileManager').getMiniBreakBackground()
+    if (backgroundImage && fs.existsSync(backgroundImage)) {
+      document.body.style.backgroundImage = `url(${backgroundImage.replace(/\\/g, '/')})`
+      document.body.style.backgroundSize = 'cover'
+      document.body.style.backgroundPosition = 'center'
+    }
   })
 
   ipcRenderer.once('progress', (event, started, duration, strictMode, postpone, postponePercent, backgroundColor, backgroundImage) => {
