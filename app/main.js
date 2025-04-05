@@ -179,10 +179,6 @@ async function initialize(isAppStart = true) {
   if (!gotTheLock) {
     return
   }
-  if (!profileManager) {
-    profileManager = new ProfileManager(settings)
-    global.profileManager = profileManager
-  }
   // TODO maybe we should not reinitialize but handle everything when we save new values for preferences
   log.info(`Stretchly: ${isAppStart ? '' : 're'}initializing...`)
   require('events').defaultMaxListeners = 200 // for watching Store changes
@@ -221,12 +217,18 @@ async function initialize(isAppStart = true) {
       watch: true
     })
     log.info('Stretchly: loading preferences')
+    log.info("récupération de customProfile", settings.get('customProfile'))
     Store.initRenderer()
     Object.entries(settings.store).forEach(([key, _]) => {
       settings.onDidChange(key, (newValue, oldValue) => {
         log.info(`Stretchly: setting '${key}' to '${JSON.stringify(newValue)}' (was '${JSON.stringify(oldValue)}')`)
       })
     })
+    if (!profileManager) {
+      profileManager = new ProfileManager(settings)
+      global.profileManager = profileManager
+    }
+
   }
   if (!breakPlanner) {
     breakPlanner = new BreaksPlanner(settings)
