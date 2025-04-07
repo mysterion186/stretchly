@@ -217,7 +217,7 @@ async function initialize(isAppStart = true) {
       watch: true
     })
     log.info('Stretchly: loading preferences')
-    log.info("récupération de customProfile", settings.get('customProfile'))
+
     Store.initRenderer()
     Object.entries(settings.store).forEach(([key, _]) => {
       settings.onDidChange(key, (newValue, oldValue) => {
