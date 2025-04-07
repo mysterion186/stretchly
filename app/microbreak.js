@@ -4,6 +4,8 @@ const remote = require('@electron/remote')
 const Utils = remote.require('./utils/utils')
 const HtmlTranslate = require('./utils/htmlTranslate')
 const Store = require('electron-store')
+const path = require('path')
+const app = remote.app
 const settings = new Store()
 
 window.onload = (e) => {
@@ -36,7 +38,9 @@ window.onload = (e) => {
     // Appliquer l'image de fond si disponible
     const backgroundImage = remote.getGlobal('profileManager').getMiniBreakBackground()
     if (backgroundImage && fs.existsSync(backgroundImage)) {
-      document.body.style.backgroundImage = `url(${backgroundImage.replace(/\\/g, '/')})`
+      const basePath = app.getAppPath()
+      const backgroundImagePath = backgroundImage ? path.join(basePath, backgroundImage) : null
+      document.body.style.backgroundImage = `url('${backgroundImagePath.replace(/\\/g, '/')}')`
       document.body.style.backgroundSize = 'cover'
       document.body.style.backgroundPosition = 'center'
     }
