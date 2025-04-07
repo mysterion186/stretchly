@@ -217,6 +217,7 @@ async function initialize(isAppStart = true) {
       watch: true
     })
     log.info('Stretchly: loading preferences')
+    //log.info("Valeur de settings: ", settings.store)
 
     Store.initRenderer()
     Object.entries(settings.store).forEach(([key, _]) => {
@@ -306,7 +307,7 @@ function startI18next() {
     .init({
       lng: settings.get('language'),
       fallbackLng: 'en',
-      debug: !app.isPackaged,
+      debug: false,
       backend: {
         loadPath: path.join(__dirname, '/locales/{{lng}}.json'),
         jsonIndent: 2

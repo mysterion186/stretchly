@@ -13,9 +13,11 @@ class ProfileManager {
       // Initialiser avec un profil par défaut si aucun n'existe
       this.initializeDefaultProfile()
     }
+    else {
+      this.profile = this.settings.get('customProfile')
+    }
 
-    // Charger le profil depuis les settings
-    this.profile = this.settings.get('customProfile')
+    log.info("profil chargé: ", this.profile)
 
     log.info('Stretchly: profil client chargé depuis les settings')
   }
