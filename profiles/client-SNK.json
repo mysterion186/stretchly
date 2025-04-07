@@ -1,7 +1,7 @@
 {
   "name": "Client SNK",
-  "miniBreakBackground": "../app/images/profiles/wallpaper.jpeg",
-  "longBreakBackground": "../app/images/profiles/IMG_4805.JPG",
+  "miniBreakBackground": "../app/images/profiles/snk-2.png",
+  "longBreakBackground": "../app/images/profiles/snk-3.png",
   "miniBreakIdeas": [
     "Message personnalisé 1 pour le client SNK",
     "Message personnalisé 2 pour le client SNK",
