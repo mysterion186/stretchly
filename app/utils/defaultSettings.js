@@ -1,3 +1,4 @@
+const customProfile = require('./customProfile')
 const defaultBreakIdeas = require('./defaultBreakIdeas')
 const defaultMicrobreakIdeas = require('./defaultMicrobreakIdeas')
 const Utils = require('./utils')
@@ -75,21 +76,5 @@ module.exports = {
   skipToNextLongBreakShortcut: '',
   resetBreaksShortcut: '',
   showTrayMenuInStrictMode: false,
-  profiles: {
-    active: 'default',
-    list: {
-      default: {
-        name: 'Default',
-        backgroundImage: null,
-        content: {
-          microbreak: null,
-          break: null
-        },
-        colors: {
-          microbreak: '#478484',
-          break: '#478484'
-        }
-      }
-    }
-  }
+  customProfile: customProfile
 }
