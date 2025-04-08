@@ -701,169 +701,22 @@ function getBlurredBackgroundWindowOptions() {
 }
 
 function startMicrobreak() {
-  // don't start another break if break running
-  if (microbreakWins) {
-    log.warn('Stretchly: Mini Break already running, not starting Mini Break')
-    return
-  }
-
   const breakDuration = settings.get('microbreakDuration')
-  const strictMode = settings.get('microbreakStrictMode')
-  const postponesLimit = settings.get('microbreakPostponesLimit')
-  const postponableDurationPercent = settings.get('microbreakPostponableDurationPercent')
-  const postponable = settings.get('microbreakPostpone') &&
-    breakPlanner.postponesNumber < postponesLimit && postponesLimit > 0
-  const showBreaksAsRegularWindows = settings.get('showBreaksAsRegularWindows')
-
-  const modalPath = path.join('file://', __dirname, '/microbreak.html')
-  microbreakWins = []
-
-  const idea = nextIdea || (settings.get('ideas') ? microbreakIdeas.randomElement : [''])
-  nextIdea = null
-
-  if (settings.get('microbreakStartSoundPlaying') && !settings.get('silentNotifications')) {
-    processWin.webContents.send('playSound', settings.get('miniBreakAudio'), settings.get('volume'))
-  }
-
-  for (let localDisplayId = 0; localDisplayId < numberOfDisplays(); localDisplayId++) {
-    const windowOptions = {
-      width: Number.parseInt(displaysWidth(localDisplayId) * settings.get('breakWindowWidth')),
-      height: Number.parseInt(displaysHeight(localDisplayId) * settings.get('breakWindowHeight')),
-      autoHideMenuBar: true,
-      icon: windowIconPath(),
-      resizable: false,
-      frame: showBreaksAsRegularWindows,
-      show: false,
-      backgroundThrottling: false,
-      transparent: true,
-      ...getBlurredBackgroundWindowOptions(),
-      backgroundColor: calculateBackgroundColor(settings.get('miniBreakColor')),
-      skipTaskbar: !showBreaksAsRegularWindows,
-      focusable: showBreaksAsRegularWindows,
-      alwaysOnTop: !showBreaksAsRegularWindows,
-      hasShadow: false,
-      title: 'Stretchly',
-      titleBarStyle: 'hidden',
-      titleBarOverlay: false,
-      webPreferences: {
-        preload: path.join(__dirname, './microbreak.js'),
-        enableRemoteModule: true,
-        sandbox: false
-      }
-    }
-
-    if (settings.get('fullscreen') && process.platform !== 'darwin') {
-      windowOptions.width = displaysWidth(localDisplayId)
-      windowOptions.height = displaysHeight(localDisplayId)
-      windowOptions.x = displaysX(localDisplayId, 0, true)
-      windowOptions.y = displaysY(localDisplayId, 0, true)
-    } else if (!(settings.get('fullscreen') && process.platform === 'win32')) {
-      windowOptions.x = displaysX(localDisplayId, windowOptions.width, false)
-      windowOptions.y = displaysY(localDisplayId, windowOptions.height, false)
-    }
-
-    let microbreakWinLocal = new BrowserWindow(windowOptions)
-    // seems to help with multiple-displays problems
-    microbreakWinLocal.setSize(windowOptions.width, windowOptions.height)
-
-    ipcMain.on('send-microbreak-data', (event) => {
-      const startTime = Date.now()
-      if (!strictMode || postponable) {
-        if (settings.get('endBreakShortcut') !== '') {
-          globalShortcut.register(settings.get('endBreakShortcut'), () => {
-            const passedPercent = (Date.now() - startTime) / breakDuration * 100
-            if (Utils.canPostpone(postponable, passedPercent, postponableDurationPercent)) {
-              postponeMicrobreak()
-            } else if (Utils.canSkip(strictMode, postponable, passedPercent, postponableDurationPercent)) {
-              finishMicrobreak(false)
-            }
-          })
-        }
-      }
-      const activeProfile = profileManager.getActiveProfile()
-      let backgroundImage = null
-      if (activeProfile && activeProfile.backgroundImage && activeProfile.backgroundImage.microbreak) {
-        backgroundImage = profileManager.getBackgroundImagePath(settings.get('profiles.active'), 'microbreak')
-      }
-      event.sender.send('microbreakIdea', idea)
-      event.sender.send('progress', startTime,
-        breakDuration, strictMode, postponable, postponableDurationPercent,
-        calculateBackgroundColor(settings.get('miniBreakColor')), backgroundImage)
-    })
-    // microbreakWinLocal.webContents.openDevTools()
-    microbreakWinLocal.once('ready-to-show', () => {
-      log.info('Stretchly: ready-to-show fired')
-    })
-
-    ipcMain.once('mini-break-loaded', () => {
-      log.info('Stretchly: Mini Break window loaded')
-      if (showBreaksAsRegularWindows) {
-        microbreakWinLocal.show()
-      } else {
-        microbreakWinLocal.showInactive()
-      }
-
-      log.info(`Stretchly: showing window ${localDisplayId + 1} of ${numberOfDisplays()}`)
-      if (process.platform === 'darwin') {
-        if (showBreaksAsRegularWindows) {
-          microbreakWinLocal.setFullScreen(settings.get('fullscreen'))
-        } else {
-          microbreakWinLocal.setMinimizable(false)
-          microbreakWinLocal.setClosable(false)
-          microbreakWinLocal.setKiosk(settings.get('fullscreen'))
-        }
-      }
-      if (localDisplayId === 0) {
-        breakPlanner.emit('microbreakStarted', true)
-        log.info('Stretchly: starting Mini Break')
-      }
-      if (!settings.get('fullscreen') && process.platform !== 'darwin') {
-        setTimeout(() => {
-          microbreakWinLocal.center()
-        }, 0)
-      }
-      updateTray()
-    })
-
-    require('@electron/remote/main').enable(microbreakWinLocal.webContents)
-    microbreakWinLocal.loadURL(modalPath)
-    microbreakWinLocal.setVisibleOnAllWorkspaces(true)
-    microbreakWinLocal.setAlwaysOnTop(!showBreaksAsRegularWindows, 'pop-up-menu')
-    if (microbreakWinLocal) {
-      microbreakWinLocal.on('close', (e) => {
-        if (breakPlanner.scheduler.timeLeft > 0 && settings.get('microbreakStrictMode')) {
-          // FIXME this will still log when postponing break
-          log.info('Stretchly: preventing closing break window as in strict mode')
-          e.preventDefault()
-        }
-      })
-      microbreakWinLocal.on('closed', () => {
-        microbreakWinLocal = null
-      })
-    }
-    microbreakWins.push(microbreakWinLocal)
-
-    if (!settings.get('allScreens')) {
-      if (numberOfDisplays() > 1) {
-        log.info('Stretchly: not showing on more Monitors as it is disabled.')
-      }
-      break
-    }
-  }
-  if (process.platform === 'darwin') {
-    if (app.dock.isVisible) {
-      app.dock.hide()
-    }
-  }
+  breakHandler(breakDuration)
 }
 
 function startBreak() {
+  const breakDuration = settings.get("breakDuration")
+  breakHandler(breakDuration)
+}
+
+function breakHandler(breakRetrievedDuration) {
   if (breakWins) {
     log.warn('Stretchly: Long Break already running, not starting Long Break')
     return
   }
 
-  const breakDuration = settings.get('breakDuration')
+  const breakDuration = breakRetrievedDuration
   const strictMode = settings.get('breakStrictMode')
   const postponesLimit = settings.get('breakPostponesLimit')
   const postponableDurationPercent = settings.get('breakPostponableDurationPercent')
