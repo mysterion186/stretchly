@@ -1,3 +1,23 @@
+/* À ajouter à app/css/commons.css */
+
+/* Solution universelle pour la lisibilité du texte */
+* {
+  text-shadow: 
+    -1px -1px 0 rgba(0, 0, 0, 0.6),
+     1px -1px 0 rgba(0, 0, 0, 0.6),
+    -1px  1px 0 rgba(0, 0, 0, 0.6),
+     1px  1px 0 rgba(0, 0, 0, 0.6);
+}
+
+/* Spécifiquement pour le texte dans les écrans de pause */
+.breaks div {
+  position: relative;
+  z-index: 2;
+}
+
+.breaks {
+  position: relative;
+}
 @font-face {
   font-family: 'Noto Sans Light';
   font-style: normal;
