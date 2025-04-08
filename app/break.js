@@ -1,4 +1,4 @@
-const { ipcRenderer } = require('electron')
+const { ipcRenderer, shell } = require('electron')
 const remote = require('@electron/remote')
 const fs = require('fs')
 const Utils = remote.require('./utils/utils')
@@ -32,8 +32,35 @@ window.onload = (event) => {
     // Vérifier si on a une idée de pause du profil
     const profileIdea = remote.getGlobal('profileManager').getLongBreakIdea()
     if (profileIdea) {
-      breakIdea.innerHTML = profileIdea.title || ''
-      breakText.innerHTML = profileIdea.text || ''
+      // Si le titre et le texte sont présents dans le profil
+      if (profileIdea.title && profileIdea.text) {
+        // Créez un lien cliquable avec le titre
+        breakIdea.innerHTML = `<a href="#" id="break-title-link">${profileIdea.title || ''}</a>`
+
+        // Cachez le texte par défaut (nous l'utiliserons comme URL)
+        breakText.style.display = 'none'
+
+        // Stocker l'URL dans une variable
+        const url = profileIdea.text || ''
+
+        // Ajouter l'événement de clic sur le lien du titre
+        document.addEventListener('click', (e) => {
+          if (e.target && e.target.id === 'break-title-link') {
+            e.preventDefault()
+            // Vérifier si le texte ressemble à une URL
+            if (url.startsWith('http://') || url.startsWith('https://')) {
+              shell.openExternal(url)
+            } else {
+              // Si ce n'est pas une URL, vous pouvez choisir d'afficher le texte
+              breakText.style.display = breakText.style.display === 'none' ? 'block' : 'none'
+            }
+          }
+        })
+      } else {
+        // Si l'un des deux est manquant, affichez ce qui est disponible
+        breakIdea.innerHTML = profileIdea.title || ''
+        breakText.innerHTML = profileIdea.text || ''
+      }
     } else {
       breakIdea.innerHTML = message[0] || ''
       breakText.innerHTML = message[1] || ''
@@ -45,7 +72,6 @@ window.onload = (event) => {
       const basePath = app.getAppPath()
       const backgroundImagePath = backgroundImage ? path.join(basePath, backgroundImage) : null
       document.body.style.backgroundImage = `url('${backgroundImagePath.replace(/\\/g, '/')}')`
-
       document.body.style.backgroundSize = 'cover'
       document.body.style.backgroundPosition = 'center'
     }

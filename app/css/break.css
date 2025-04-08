@@ -1,3 +1,24 @@
+.breaks > :nth-child(1) > .break-idea a {
+  color: inherit;
+  text-decoration: none;
+  position: relative;
+  cursor: pointer;
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.6);
+  transition: all 0.2s ease-in-out;
+}
+
+.breaks > :nth-child(1) > .break-idea a:hover {
+  border-bottom: 1px solid #FFFFFF;
+}
+
+/* Pour les thèmes clairs */
+.ffffff .breaks > :nth-child(1) > .break-idea a {
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.6);
+}
+
+.ffffff .breaks > :nth-child(1) > .break-idea a:hover {
+  border-bottom: 1px solid #000000;
+}
 .breaks {
   align-items: center;
   color: #FFFFFF;
