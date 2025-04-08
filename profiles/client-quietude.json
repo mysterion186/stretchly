@@ -1,9 +1,8 @@
 
-// Ce fichier est généré automatiquement par set-profile.js
-module.exports = {
+{
   "name": "Client Test",
-  "miniBreakBackground": "app/images/profiles/oiseaux.jpeg",
-  "longBreakBackground": "app/images/profiles/oiseaux.jpeg",
+  "miniBreakBackground": "../app/images/profiles/oiseaux.jpeg",
+  "longBreakBackground": "../app/images/profiles/oiseaux.jpeg",
   "miniBreakIdeas": [
     "Message personnalisé 1 pour le client SNK",
     "Message personnalisé 2 pour le client SNK",
