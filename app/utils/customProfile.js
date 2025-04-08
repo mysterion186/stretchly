@@ -3,7 +3,7 @@
 module.exports = {
   "name": "Client FMA",
   "miniBreakBackground": "app/images/profiles/wallpaper.jpeg",
-  "longBreakBackground": "app/images/profiles/IMG_4805.JPG",
+  "longBreakBackground": "app/images/profiles/wallpaper.jpeg",
   "miniBreakIdeas": [
     "Message personnalisé 1 pour le client FMA",
     "Message personnalisé 2 pour le client FMA",
@@ -11,12 +11,12 @@ module.exports = {
   ],
   "longBreakIdeas": [
     {
-      "title": "Titre personnalisé 1",
-      "text": "Texte personnalisé 1 pour le client FMA"
+      "title": "Codeur",
+      "text": "https://www.codeur.com/"
     },
     {
-      "title": "Titre personnalisé 2",
-      "text": "Texte personnalisé 2 pour le client FMA"
+      "title": "WeddingPro",
+      "text": "https://weddingpro.fr/"
     }
   ]
 }
