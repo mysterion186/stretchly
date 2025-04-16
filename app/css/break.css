@@ -1,42 +1,51 @@
+/* Styles pour les liens dans .break-idea */
 .breaks > :nth-child(1) > .break-idea a {
-  color: inherit;
-  text-decoration: none;
-  position: relative;
-  cursor: pointer;
-  border-bottom: 1px dotted rgba(255, 255, 255, 0.6);
-  transition: all 0.2s ease-in-out;
+  color: inherit; /* Hérite de la couleur du texte parent */
+  text-decoration: none; /* Pas de soulignement par défaut */
+  position: relative; /* Pour le positionnement potentiel d'éléments enfants */
+  cursor: pointer; /* Curseur main */
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.6); /* Ligne pointillée sous le lien (thème sombre) */
+  transition: all 0.2s ease-in-out; /* Transition douce au survol */
+  display: block; /* Fait en sorte que chaque lien occupe sa propre ligne */
+  margin-bottom: 10px; /* Ajoute de l'espace entre les liens */
+  padding: 5px 0; /* Ajoute un peu d'espace vertical interne */
 }
 
 .breaks > :nth-child(1) > .break-idea a:hover {
-  border-bottom: 1px solid #FFFFFF;
+  border-bottom: 1px solid #FFFFFF; /* Ligne pleine blanche au survol (thème sombre) */
 }
 
-/* Pour les thèmes clairs */
+/* Styles spécifiques pour les liens dans .break-idea en thème clair */
 .ffffff .breaks > :nth-child(1) > .break-idea a {
-  border-bottom: 1px dotted rgba(0, 0, 0, 0.6);
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.6); /* Ligne pointillée noire (thème clair) */
 }
 
 .ffffff .breaks > :nth-child(1) > .break-idea a:hover {
-  border-bottom: 1px solid #000000;
+  border-bottom: 1px solid #000000; /* Ligne pleine noire au survol (thème clair) */
 }
+
+/* Styles généraux du conteneur principal */
 .breaks {
-  align-items: center;
-  color: #FFFFFF;
-  display: grid;
+  align-items: center; /* Centre les éléments verticalement dans leurs cellules de grille */
+  color: #FFFFFF; /* Couleur de texte par défaut (thème sombre) */
+  display: grid; /* Utilise CSS Grid pour la mise en page */
   font-family: 'Noto Sans Light', 'Noto Sans Arabic Light',
     'Noto Sans CJK KR Light',
     'Noto Sans Devanagari Light',
     'Noto Sans Gujarati Light', 'Noto Sans Gurmukhi Light',
-    'Noto Sans Hebrew Light';
-  font-weight: 300;
-  grid-template: 85vh 10vh / 100px auto 100px;
-  justify-items: center;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  position: relative;
+    'Noto Sans Hebrew Light'; /* Police de caractères */
+  font-weight: 300; /* Graisse de la police */
+  grid-template: 85vh 10vh / 100px auto 100px; /* Définit les lignes et colonnes de la grille */
+  justify-items: center; /* Centre les éléments horizontalement dans leurs cellules de grille */
+  background-size: cover; /* Ajuste l'image de fond */
+  background-position: center; /* Centre l'image de fond */
+  background-repeat: no-repeat; /* Empêche la répétition de l'image de fond */
+  position: relative; /* Nécessaire pour le positionnement absolu de ::before */
+  height: 100vh; /* Assure que le conteneur prend toute la hauteur */
+  box-sizing: border-box; /* Inclut padding et border dans la taille de l'élément */
 }
 
+/* Overlay semi-transparent (si l'image de fond est définie) */
 .breaks::before {
   content: "";
   position: absolute;
@@ -44,109 +53,188 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: inherit;
-  opacity: 0.7; /* Semi-transparent overlay */
-  z-index: -1;
+  /* La couleur est héritée ou définie via JS/style en ligne si nécessaire */
+  /* background-color: inherit; */
+  background-color: rgba(0, 0, 0, 0.5); /* Exemple: Noir semi-transparent par défaut */
+  opacity: 0.7; /* Ajustez si besoin, combine avec la couleur RGBA */
+  z-index: -1; /* Place l'overlay derrière le contenu */
 }
 
 
+/* Tous les enfants directs de .breaks vont dans la 2ème colonne */
 .breaks > * {
   grid-column: 2 / span 1;
+  width: 100%; /* Assure que les enfants prennent la largeur de la colonne */
+  box-sizing: border-box; /* Inclut padding/border */
 }
 
+/* Styles pour le premier enfant (conteneur de break-idea, break-text, progress) */
 .breaks > :nth-child(1) {
-  text-align: center;
+  text-align: center; /* Centre le texte à l'intérieur */
+  align-self: center; /* Centre verticalement ce conteneur dans sa ligne de grille */
+  display: flex; /* Utilise flexbox pour l'alignement interne */
+  flex-direction: column; /* Empile les éléments verticalement */
+  justify-content: center; /* Centre verticalement le contenu flex */
+  height: 100%; /* Prend toute la hauteur de sa ligne de grille (85vh) */
 }
 
 .breaks > :nth-child(1) > progress {
-  margin-top: 50px;
+  margin-top: 20px; /* Réduit un peu l'espace */
+  width: 80%; /* Ajuste la largeur de la barre de progression */
+  align-self: center; /* Centre la barre de progression horizontalement */
 }
 
 .breaks > :nth-child(1) >  .microbreak-idea {
   font-size: 30px;
   letter-spacing: 0.44px;
-  line-height: 46px;
+  line-height: 1.4; /* Utilise une valeur relative pour line-height */
 }
 
+/* Styles pour la zone des idées/liens de pause */
 .breaks > :nth-child(1) >  .break-idea {
-  font-size: 36px;
+  font-size: 36px; /* Taille de police pour les titres/liens */
   letter-spacing: 0.52px;
-  line-height: 49px;
+  line-height: 1.3; /* Ajuste la hauteur de ligne */
+  margin-bottom: 20px; /* Espace avant le texte ou la barre de progression */
+
+  /* --- MODIFICATIONS POUR LE SCROLL --- */
+  max-height: 35vh;   /* Hauteur maximale (ajustez cette valeur, ex: 200px, 30vh) */
+  overflow-y: auto;   /* Active la barre de défilement verticale si nécessaire */
+  overflow-x: hidden;  /* Cache la barre de défilement horizontale */
+  padding: 10px 15px; /* Ajoute un peu d'espace interne (haut/bas et gauche/droite) */
+  /* Optionnel: Espace en bas pour ne pas coller à la barre */
+  /* padding-bottom: 10px; => inclus dans le padding général ci-dessus */
+
+  /* Style optionnel de la barre de défilement (Firefox) */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.5) transparent; /* Pouce blanc semi-transparent (thème sombre) */
+  /* --- FIN DES MODIFICATIONS POUR LE SCROLL --- */
 }
 
+/* Style optionnel de la barre de défilement (Webkit/Blink: Chrome, Edge, Safari) */
+.breaks > :nth-child(1) > .break-idea::-webkit-scrollbar {
+  width: 8px; /* Largeur de la barre */
+}
+
+.breaks > :nth-child(1) > .break-idea::-webkit-scrollbar-track {
+  background: transparent; /* Piste transparente */
+}
+
+.breaks > :nth-child(1) > .break-idea::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.5); /* Pouce blanc semi-transparent (thème sombre) */
+  border-radius: 4px; /* Arrondi du pouce */
+}
+
+/* Style pour le texte additionnel (initialement caché par JS si des liens existent) */
 .breaks > :nth-child(1) >  .break-text {
   font-size: 24px;
   letter-spacing: 0.35px;
-  line-height: 33px;
-  margin-top: 60px;
+  line-height: 1.4; /* Utilise une valeur relative */
+  margin-top: 15px; /* Espace après la zone .break-idea */
 }
 
+/* Styles pour le deuxième enfant (conteneur des boutons postpone/skip) */
 .breaks > :nth-child(2) {
   font-size: 18px;
   letter-spacing: 0.26px;
-  line-height: 18px;
+  line-height: 1;
+  display: flex; /* Utilise flexbox pour aligner les boutons */
+  justify-content: center; /* Centre les boutons horizontalement */
+  gap: 40px; /* Espace entre les boutons */
+  align-self: start; /* Aligne ce conteneur en haut de sa ligne de grille (10vh) */
+  padding-top: 10px; /* Ajoute un peu d'espace en haut */
 }
 
+/* Les liens dans le 2ème enfant sont visibles */
 .breaks > :nth-child(2) > a {
-  display: none;
+  /* display: none;  Commenté car les boutons doivent être visibles */
+  display: flex; /* Utilise flex pour aligner image et texte */
+  align-items: center; /* Centre verticalement image et texte */
+  gap: 8px; /* Espace entre l'image et le texte du bouton */
+  color: inherit; /* Hérite la couleur */
+  text-decoration: none; /* Pas de soulignement */
 }
 
 .breaks > :nth-child(2) > a:hover {
-  color: #FFFF00;
+  color: #FFFF00; /* Couleur jaune au survol (thème sombre) */
 }
 
 .breaks > :nth-child(2) > a img {
-  /* https://codepen.io/sosuke/pen/Pjoqqp */
+  /* Filtre pour icônes blanches (thème sombre) */
   filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
   height: 20px;
-  padding-left: 20px;
   width: 20px;
+  /* padding-left: 20px; => Géré par 'gap' sur le parent 'a' */
 }
 
-body[dir=rtl] .breaks > :nth-child(2) > a img {
-  padding-left: 0;
-  padding-right: 20px;
+/* Ajustement pour l'écriture de droite à gauche */
+body[dir=rtl] .breaks > :nth-child(2) > a {
+  flex-direction: row-reverse; /* Inverse l'ordre image/texte */
 }
+/* body[dir=rtl] .breaks > :nth-child(2) > a img { => Plus nécessaire avec flex-direction } */
 
+/* Filtre pour icônes jaunes au survol (thème sombre) */
 .breaks > :nth-child(2) > a:hover img {
   filter: invert(87%) sepia(71%) saturate(3206%) hue-rotate(359deg) brightness(101%) contrast(103%);
 }
 
+/* Style pour l'indicateur de temps */
 #progress-time {
   display: block;
   font-size: 15px;
-  padding-top: 20px;
+  margin-top: 5px; /* Réduit l'espace avec la barre */
 }
 
+/* --- Thème Clair --- */
 .ffffff .breaks {
-  color: #000000;
-}
-.ffffff .breaks > :nth-child(2) > a:hover {
-  color: #ffffff;
+  color: #000000; /* Couleur de texte noire */
 }
 
-.ffffff .breaks > :nth-child(2) > a:hover img,
-.ffffff .breaks > :nth-child(2) > a:hover {
-  color: #000000;
+/* Overlay pour thème clair (si nécessaire) */
+.ffffff .breaks::before {
+  background-color: rgba(255, 255, 255, 0.6); /* Blanc semi-transparent */
 }
 
-.ffffff .breaks > :nth-child(2) .tiptext,
-.ffffff .breaks > :nth-child(2) .tiptext  {
+/* Couleur des boutons au survol (thème clair) */
+.ffffff .breaks > :nth-child(2) > a:hover {
+   color: #0056b3; /* Un bleu foncé par exemple */
+}
+
+/* Style des tooltips (thème clair) */
+.ffffff .breaks > :nth-child(2) .tiptext {
   color: #000000;
   background-color: #ffffff;
   border: 1px solid #000000;
 }
 
+/* Icônes des boutons (thème clair - noires par défaut) */
 .ffffff .breaks > :nth-child(2) > a img {
-  filter: hue-rotate(288deg) brightness(102%) contrast(102%);
+  filter: none; /* Enlève le filtre pour afficher l'icône originale (supposée noire ou adaptée) */
+  /* Si les icônes SVG sont noires, ceci suffit. Sinon, ajustez le filtre: */
+  /* filter: invert(0%) sepia(0%) saturate(100%) hue-rotate(0deg) brightness(0%) contrast(100%); */
 }
 
+/* Icônes des boutons au survol (thème clair - couleur au survol) */
 .ffffff .breaks > :nth-child(2) > a:hover img {
-  filter: hue-rotate(359deg) brightness(101%) contrast(103%);
+  /* Exemple: Filtre pour la couleur #0056b3 */
+   filter: invert(25%) sepia(58%) saturate(4668%) hue-rotate(196deg) brightness(94%) contrast(101%);
 }
 
+/* Ajustement de la barre de défilement pour le thème clair (Firefox) */
+.ffffff .breaks > :nth-child(1) > .break-idea {
+  scrollbar-color: rgba(0, 0, 0, 0.4) transparent; /* Pouce noir semi-transparent */
+}
+
+/* Ajustement de la barre de défilement pour le thème clair (Webkit) */
+.ffffff .breaks > :nth-child(1) > .break-idea::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.4); /* Pouce noir semi-transparent */
+}
+
+
+/* Positionnement du dernier enfant (potentiellement inutile si non utilisé) */
 .breaks > :last-child {
   bottom: 12px;
   position: absolute;
   right: 12px;
+  /* Assurez-vous que cet élément a un contenu ou une utilité */
 }
