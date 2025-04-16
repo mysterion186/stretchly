@@ -26,56 +26,94 @@ window.onload = (event) => {
     ipcRenderer.send('postpone-break')
 
   ipcRenderer.once('breakIdea', (event, message) => {
-    const breakIdea = document.querySelector('.break-idea')
-    const breakText = document.querySelector('.break-text')
+    const breakIdeaContainer = document.querySelector('.break-idea');
+    const breakTextElement = document.querySelector('.break-text');
 
-    // Vérifier si on a une idée de pause du profil
-    const profileIdea = remote.getGlobal('profileManager').getLongBreakIdea()
-    if (profileIdea) {
-      // Si le titre et le texte sont présents dans le profil
-      if (profileIdea.title && profileIdea.text) {
-        // Créez un lien cliquable avec le titre
-        breakIdea.innerHTML = `<a href="#" id="break-title-link">${profileIdea.title || ''}</a>`
+    // Vider le contenu précédent
+    breakIdeaContainer.innerHTML = '';
+    breakTextElement.innerHTML = '';
+    breakTextElement.style.display = 'none'; // Cacher par défaut
 
-        // Cachez le texte par défaut (nous l'utiliserons comme URL)
-        breakText.style.display = 'none'
+    // Récupérer le tableau d'idées de pause
+    // Renommé en profileIdeas (pluriel) pour la clarté
+    const profileIdeas = remote.getGlobal('profileManager').getLongBreakIdea();
 
-        // Stocker l'URL dans une variable
-        const url = profileIdea.text || ''
+    // Vérifier si on a bien un tableau non vide d'idées
+    if (Array.isArray(profileIdeas) && profileIdeas.length > 0) {
+      // Boucler sur chaque idée dans le tableau
+      profileIdeas.forEach(idea => {
+        const title = idea.title || ''; // Utiliser une chaîne vide si le titre est manquant
+        const text = idea.text || '';   // Utiliser une chaîne vide si le texte est manquant
 
-        // Ajouter l'événement de clic sur le lien du titre
-        document.addEventListener('click', (e) => {
-          if (e.target && e.target.id === 'break-title-link') {
-            e.preventDefault()
-            // Vérifier si le texte ressemble à une URL
-            if (url.startsWith('http://') || url.startsWith('https://')) {
-              shell.openExternal(url)
-            } else {
-              // Si ce n'est pas une URL, vous pouvez choisir d'afficher le texte
-              breakText.style.display = breakText.style.display === 'none' ? 'block' : 'none'
-            }
+        // Créer un élément pour chaque idée (optionnel, mais bon pour la structure/style)
+        const ideaDiv = document.createElement('div');
+        ideaDiv.classList.add('break-idea-item'); // Ajouter une classe pour le style si besoin
+
+        // Créer le lien cliquable avec le titre
+        const link = document.createElement('a');
+        link.href = '#'; // Empêche la navigation mais conserve le style de lien
+        link.textContent = title || '[Sans titre]'; // Afficher un texte par défaut si le titre est vide
+        link.dataset.text = text; // Stocker le texte/URL associé dans un attribut data-*
+
+        // Ajouter le lien au div de l'idée
+        ideaDiv.appendChild(link);
+
+        // Ajouter le div de l'idée au conteneur principal
+        breakIdeaContainer.appendChild(ideaDiv);
+      });
+
+      // Ajouter UN SEUL écouteur d'événement sur le conteneur (délégation d'événement)
+      breakIdeaContainer.addEventListener('click', (e) => {
+        // Vérifier si l'élément cliqué est bien un de nos liens avec data-text
+        if (e.target && e.target.tagName === 'A' && e.target.dataset.text !== undefined) {
+          e.preventDefault(); // Empêcher le comportement par défaut du lien (#)
+          const associatedText = e.target.dataset.text;
+
+          // Vérifier si le texte associé ressemble à une URL
+          if (associatedText.startsWith('http://') || associatedText.startsWith('https://')) {
+            shell.openExternal(associatedText); // Ouvrir l'URL externe
+          } else {
+            // Gérer le cas où ce n'est pas une URL
+            // Optionnel : Vous pourriez afficher le texte d'une autre manière (ex: tooltip, console.log)
+            console.log("Texte associé (non-URL) :", associatedText);
+            // Ou ne rien faire si le clic ne doit rien déclencher pour le texte simple
           }
-        })
-      } else {
-        // Si l'un des deux est manquant, affichez ce qui est disponible
-        breakIdea.innerHTML = profileIdea.title || ''
-        breakText.innerHTML = profileIdea.text || ''
-      }
+        }
+      });
+
     } else {
-      breakIdea.innerHTML = message[0] || ''
-      breakText.innerHTML = message[1] || ''
+      // Comportement de secours : si profileIdeas n'est pas un tableau valide ou est vide
+      // Utiliser le message reçu via IPC comme avant
+      breakIdeaContainer.innerHTML = message[0] || '';
+      const fallbackText = message[1] || '';
+      if (fallbackText) {
+        breakTextElement.innerHTML = fallbackText;
+        breakTextElement.style.display = 'block'; // Afficher si du texte existe
+      }
     }
 
-    // Appliquer l'image de fond si disponible
-    const backgroundImage = remote.getGlobal('profileManager').getLongBreakBackground()
-    if (backgroundImage && fs.existsSync(backgroundImage)) {
-      const basePath = app.getAppPath()
-      const backgroundImagePath = backgroundImage ? path.join(basePath, backgroundImage) : null
-      document.body.style.backgroundImage = `url('${backgroundImagePath.replace(/\\/g, '/')}')`
-      document.body.style.backgroundSize = 'cover'
-      document.body.style.backgroundPosition = 'center'
+    // --- Appliquer l'image de fond (logique inchangée) ---
+    const backgroundImage = remote.getGlobal('profileManager').getLongBreakBackground();
+    if (backgroundImage) {
+      try {
+        const basePath = app.getAppPath(); // S'assurer que 'app' est bien défini
+        const backgroundImagePath = path.join(basePath, backgroundImage); // S'assurer que 'path' est défini
+
+        // Vérifier l'existence AVANT de l'appliquer
+        if (fs.existsSync(backgroundImagePath)) { // S'assurer que 'fs' est défini
+          // Normaliser les slashs pour CSS, surtout sous Windows
+          const cssPath = backgroundImagePath.replace(/\\/g, '/');
+          document.body.style.backgroundImage = `url('${cssPath}')`;
+          document.body.style.backgroundSize = 'cover';
+          document.body.style.backgroundPosition = 'center';
+        } else {
+          console.warn(`Image de fond non trouvée: ${backgroundImagePath}`);
+        }
+      } catch (error) {
+        console.error("Erreur lors de l'application de l'image de fond:", error);
+      }
     }
-  })
+  });
 
   ipcRenderer.once('progress', (event, started, duration, strictMode, postpone, postponePercent, backgroundColor, backgroundImage) => {
     const progress = document.querySelector('#progress')
