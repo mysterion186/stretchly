@@ -69,7 +69,7 @@ class ProfileManager {
   getLongBreakIdea() {
     if (!this.profile || !this.profile.longBreakIdeas) return null
 
-    return this.profile.longBreakIdeas[Math.floor(Math.random() * this.profile.longBreakIdeas.length)]
+    return this.profile.longBreakIdeas
   }
 
   // Obtenir l'image de fond pour une pause courte
