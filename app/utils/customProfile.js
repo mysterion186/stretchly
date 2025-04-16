@@ -17,6 +17,18 @@ module.exports = {
     {
       "title": "Écoute ce qui est là",
       "text": "https://soundcloud.com/enchante-ta-vie/ecoute-ce-qui-est-la"
+    },
+    {
+      "title": "Relaxation carillon",
+      "text": "https://www.youtube.com/watch?v=nrUMFqLWQUg&t=28s"
+    },
+    {
+      "title": "Prévention des ondes",
+      "text": "https://www.asso-quietude.fr/ressources-prevention-ondes"
+    },
+    {
+      "title": "Trésor de l'instant présent",
+      "text": "https://www.youtube.com/watch?v=mNjfMqHZZBc"
     }
   ]
 }
